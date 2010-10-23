@@ -1,3 +1,35 @@
+= danengle's addition to will_paginate
+
+I wanted my pagination links to render like the pagination on hulu.com. This is my first attempt at making that happen.
+
+All that is needed is to add the form option to your will_paginate call. Simple and easy.
+
+    <%= will_paginate :form => true %>
+
+Pagination will now display like...
+
+    <div class="pagination">
+    	<span class="first_page disabled">&#171;</span>
+    	<span class="previous_page disabled">&#139;</span>
+    	< form method="get" action="/admin" style="display:inline;" class="will_paginate_form">
+    		<input type="text" size="1" value="1" name="page"></input>
+    	</form>
+    	of
+    	<a class="last_page" href="/admin?page=3">3</a>
+    	<a class="next_page" rel="next" href="/admin?page=2">&#155;</a>
+    </div>
+
+My rspec foo needs some work, so I haven't added any additional tests yet. If anyone would like to help or give my some pointers on how best to get started, that would be awesome.
+
+other changes
+* Negative page numbers are handled by changing them to 1 (still have to handle too high page numbers in controller)
+
+TODO
+* Allow easy use of images for first, previous, and last links
+* Add tests
+
+Any suggestions or constructive criticism are welcome.
+
 = The will_paginate Ruby library
 
 Pagination is just limiting the number of records loaded and displayed. Why should you let it get in
@@ -122,4 +154,4 @@ More reading about pagination as design pattern:
 * {Pagination design pattern}[http://developer.yahoo.com/ypatterns/parent.php?pattern=pagination] on Yahoo Design Pattern Library.
 
 Want to discuss, request features, ask questions? Join the {Google
-group}[http://groups.google.com/group/will_paginate].
+group}[http://groups.google.com/group/will_paginate]	.

@@ -47,8 +47,7 @@ module WillPaginate
     # is best to do lazy counting; in other words, count *conditionally* after
     # populating the collection using the +replace+ method.
     def initialize(page, per_page, total = nil)
-      @current_page = page.to_i
-      raise InvalidPage.new(page, @current_page) if @current_page < 1
+      @current_page = page.to_i < 1 ? 1 : page.to_i
       @per_page = per_page.to_i
       raise ArgumentError, "`per_page` setting cannot be less than 1 (#{@per_page} given)" if @per_page < 1
       
@@ -113,6 +112,14 @@ module WillPaginate
       current_page < total_pages ? (current_page + 1) : nil
     end
 
+    def first_page
+      current_page == 1 ? nil : 1
+    end
+    
+    def last_page
+      current_page == total_pages ? nil : total_pages
+    end
+    
     def total_entries=(number)
       @total_entries = number.to_i
       @total_pages   = (@total_entries / per_page.to_f).ceil

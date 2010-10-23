@@ -33,8 +33,7 @@ module WillPaginate
               page_number(item) :
               send(item)
             end
-        end
-        html = html.join(@options[:separator])
+        end.join(@options[:separator])
         @options[:container] ? html_container(html) : html
       end
 
@@ -66,14 +65,22 @@ module WillPaginate
       end
       
       def previous_page
-        previous_or_next_page(@collection.previous_page, @options[:form] ? @options[:previous_arrow] : @options[:previous_label], 'previous_page')
+        link_to_page(@collection.previous_page, @options[:form] ? @options[:previous_arrow] : @options[:previous_label], 'previous_page')
       end
       
       def next_page
-        previous_or_next_page(@collection.next_page, @options[:form] ? @options[:next_arrow] : @options[:next_label], 'next_page')
+        link_to_page(@collection.next_page, @options[:form] ? @options[:next_arrow] : @options[:next_label], 'next_page')
       end
       
-      def previous_or_next_page(page, text, classname)
+      def first_page
+        link_to_page(@collection.first_page, @options[:beginning_label], 'first_page')
+      end
+      
+      def last_page
+        link_to_page(@collection.last_page, total_pages, 'last_page')
+      end
+      
+      def link_to_page(page, text, classname)
         if page
           link(text, page, :class => classname)
         else
@@ -81,29 +88,14 @@ module WillPaginate
         end
       end
       
-      def first_page
-        if current_page == 1
-          tag(:span, @options[:beginning_label])
-        else
-          link(@options[:beginning_label], 1)
-        end
-      end
-      
-      def last_page
-        link(total_pages, total_pages)
-      end
-      
       def page_form
         tag(:form,
           tag(:input, nil, :type => 'text', :size => 1, :value => current_page, :name => 'page'),
           :method => 'get',
           :action => url(current_page).gsub(/\?.*/,''),
-          :style => 'display:inline;'
+          :style => 'display:inline;',
+          :class => 'will_paginate_form'
         )
-      end
-      
-      def last_page
-        link(total_pages, total_pages)
       end
       
       def html_container(html)
